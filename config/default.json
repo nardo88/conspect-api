@@ -1,0 +1,3 @@
+{
+    "mongoUrl": "mongodb+srv://admin:admin@cluster0.rwelf.mongodb.net/conspects?retryWrites=true&w=majority"
+}
