@@ -8,7 +8,7 @@ class userController {
             // получаем файл
             const file = req.files.file
 
-            let newpath = `${path.resolve()}\\data\\${file.name}`
+            let newpath = path.join(path.resolve(), `/data/${file.name}`)
             
             // если файл по пути уже существует возвращаем ошибку на клиент
             if(fs.existsSync(newpath)){
