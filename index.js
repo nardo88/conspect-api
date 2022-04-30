@@ -7,6 +7,7 @@ import fileRouter from './routers/file.router.js'
 import path from 'path'
 import fileUpload from 'express-fileupload'
 
+const mongoUrl = 'mongodb+srv://admin:admin@cluster0.rwelf.mongodb.net/conspects?retryWrites=true&w=majority'
 
 const PORT = 5000
 const app = express()
@@ -23,7 +24,7 @@ app.use('/api/v1/file', fileRouter)
 async function start(){
     try{
 
-        await mongoose.connect(config.get('mongoUrl'), {useUnifiedTopology: true, useNewUrlParser: true})
+        await mongoose.connect(mongoUrl, {useUnifiedTopology: true, useNewUrlParser: true})
         
         app.listen(PORT, () => {
             console.log(`Server started on port ${PORT}`)
