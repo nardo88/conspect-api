@@ -1,7 +1,7 @@
 import {validationResult} from "express-validator"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import config from "config"
+import constants from "../config/constants.js"
 import User from "../models/user.js"
 import { createId } from "../utils/createId.js"
 
@@ -66,7 +66,7 @@ class userController {
             }
             const token = jwt.sign({
                 id: user.id
-            }, config.get('secretKey'), {
+            }, constants.secretKey, {
                 expiresIn: '1h'
             })
             return res.json({
@@ -82,7 +82,7 @@ class userController {
         }
     }
 
-    
+
 }
 
 export default new userController()

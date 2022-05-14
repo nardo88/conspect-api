@@ -1,0 +1,6 @@
+const constants = {
+    mongoUrl: 'mongodb+srv://admin:admin@cluster0.rwelf.mongodb.net/conspects?retryWrites=true&w=majority',
+    secretKey: 'hiy1Uxq5RAzoxZVi'
+}
+
+export default constants

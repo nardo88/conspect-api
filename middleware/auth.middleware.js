@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
-import config from 'config'
-
+import constants from '../config/constants'
 export default function(req, res, next){
     if(req.method === 'OPTIONS'){
         return next()
@@ -11,7 +10,7 @@ export default function(req, res, next){
         if(!token){
             return res.status(401).json({message: 'Auth error'})
         }
-        const decoded = jwt.verify(token, config.get('secretKey'))
+        const decoded = jwt.verify(token, constants.secretKey)
         req.user = decoded
         next()
     }catch(e){

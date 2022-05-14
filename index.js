@@ -1,7 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
-import config from 'config'
 import cors from 'cors'
+import constants from './config/constants.js'
 import userRouter from './routers/user.router.js'
 
 const PORT = 5000
@@ -15,7 +15,7 @@ app.use('/api/v1/user', userRouter)
 async function start(){
     try{
 
-        await mongoose.connect(config.get('mongoUrl'), {useUnifiedTopology: true, useNewUrlParser: true})
+        await mongoose.connect(constants.mongoUrl, {useUnifiedTopology: true, useNewUrlParser: true})
         
         app.listen(PORT, () => {
             console.log(`Server started on port ${PORT}`)
