@@ -34,34 +34,58 @@ class articleController {
         }
     }
 
-    async list(req, res){
-        try{
-            const {page = 1, limit = 10} = req.query
+    async list(req, res) {
+        try {
+            const {
+                page = 1, limit = 10
+            } = req.query
 
-            const articles = await Article.aggregate([
-                {
+            const articles = await Article.aggregate([{
                     $match: {}
                 },
                 {
+                    $sort: {
+                        updatedAt: -1
+                    },
+                },
+
+                {
                     $facet: {
-                        data: [
-                            {$skip: (page - 1) * Number(limit)},
-                            {$limit: Number(limit)}
+                        data: [{
+                                $skip: (page - 1) * Number(limit)
+                            },
+                            {
+                                $limit: Number(limit)
+                            },
+                            {
+                                $project: {
+                                    id: '$_id',
+                                    _id: 0,
+                                    title: 1,
+                                    category: 1,
+                                    createdAt: 1,
+                                    updatedAt: 1,
+                                }
+                            }
                         ],
-                        total: [{$count: 'count'}]
+                        total: [{
+                            $count: 'count'
+                        }]
                     }
                 },
                 {
                     $project: {
                         data: 1,
-                        total: {$arrayElemAt: ['$total.count', 0]}
+                        total: {
+                            $arrayElemAt: ['$total.count', 0]
+                        }
                     }
                 }
             ])
 
             res.json(articles)
 
-        }catch(e){
+        } catch (e) {
             console.log(e)
             res.json({
                 message: 'Server error',
@@ -71,11 +95,13 @@ class articleController {
 
     }
 
-    async getOne(req, res){
-        try{
-            const {id} = req.params
+    async getOne(req, res) {
+        try {
+            const {
+                id
+            } = req.params
 
-            if(!id){
+            if (!id) {
                 return res.status(400).json('id not specified')
             }
 
