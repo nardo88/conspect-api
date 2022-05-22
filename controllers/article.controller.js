@@ -83,7 +83,12 @@ class articleController {
                 }
             ])
 
-            res.json(articles)
+            console.log(articles);
+
+            res.json({
+                data: articles[0].data,
+                total: articles[0].total 
+            })
 
         } catch (e) {
             console.log(e)
