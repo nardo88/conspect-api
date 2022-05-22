@@ -34,6 +34,43 @@ class articleController {
         }
     }
 
+    async list(req, res){
+        try{
+            const {page = 1, limit = 10} = req.query
+
+            const articles = await Article.aggregate([
+                {
+                    $match: {}
+                },
+                {
+                    $facet: {
+                        data: [
+                            {$skip: (page - 1) * Number(limit)},
+                            {$limit: Number(limit)}
+                        ],
+                        total: [{$count: 'count'}]
+                    }
+                },
+                {
+                    $project: {
+                        data: 1,
+                        total: {$arrayElemAt: ['$total.count', 0]}
+                    }
+                }
+            ])
+
+            res.json(articles)
+
+        }catch(e){
+            console.log(e)
+            res.json({
+                message: 'Server error',
+                error: e
+            })
+        }
+
+    }
+
     async getOne(req, res){
         try{
             const {id} = req.params
