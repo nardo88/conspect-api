@@ -85,7 +85,7 @@ class articleController {
 
             res.json({
                 data: articles[0].data,
-                total: articles[0].total 
+                total: articles[0].total
             })
 
         } catch (e) {
@@ -101,8 +101,7 @@ class articleController {
     async previewList(req, res) {
         try {
 
-            const articles = await Article.aggregate([
-                {
+            const articles = await Article.aggregate([{
                     $project: {
                         id: '$_id',
                         _id: 0,
@@ -113,7 +112,12 @@ class articleController {
                 {
                     $group: {
                         _id: '$category',
-                        titles: {$push: '$title'}
+                        titles: {
+                            $push: {
+                                title: '$title',
+                                id: '$id'
+                            }
+                        }
                     }
                 }
             ])
