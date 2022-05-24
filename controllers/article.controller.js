@@ -83,12 +83,42 @@ class articleController {
                 }
             ])
 
-            console.log(articles);
-
             res.json({
                 data: articles[0].data,
                 total: articles[0].total 
             })
+
+        } catch (e) {
+            console.log(e)
+            res.json({
+                message: 'Server error',
+                error: e
+            })
+        }
+
+    }
+
+    async previewList(req, res) {
+        try {
+
+            const articles = await Article.aggregate([
+                {
+                    $project: {
+                        id: '$_id',
+                        _id: 0,
+                        title: 1,
+                        category: 1
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$category',
+                        titles: {$push: '$title'}
+                    }
+                }
+            ])
+
+            res.json(articles)
 
         } catch (e) {
             console.log(e)

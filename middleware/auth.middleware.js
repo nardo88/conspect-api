@@ -12,6 +12,7 @@ export default function(req, res, next){
         if(!token){
             return res.status(401).json({message: 'Auth error'})
         }
+
         const decoded = jwt.verify(token, constants.secretKey)
         req.user = decoded
         next()
