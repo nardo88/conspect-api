@@ -101,7 +101,8 @@ class articleController {
     async previewList(req, res) {
         try {
 
-            const articles = await Article.aggregate([{
+            const articles = await Article.aggregate([
+                {
                     $project: {
                         id: '$_id',
                         _id: 0,
@@ -118,6 +119,11 @@ class articleController {
                                 id: '$id'
                             }
                         }
+                    }
+                },
+                {
+                    $sort: {
+                        _id: 1
                     }
                 }
             ])
