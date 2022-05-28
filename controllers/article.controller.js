@@ -162,6 +162,48 @@ class articleController {
         }
     }
 
+    async delete(req, res) {
+        try {
+            const {
+                id
+            } = req.params
+
+            if (!id) {
+                return res.status(400).json('id not specified')
+            }
+
+            const article = await Article.findByIdAndDelete(id)
+            res.json('success')
+
+        } catch (e) {
+            console.log(e)
+            res.json({
+                message: 'Server error',
+                error: e
+            })
+        }
+    }
+
+    async update(req, res){
+        try{
+            const article = req.body
+            const { id } = req.params
+            if(!id){
+                return res.status(401).json({message: 'id not specified'})
+            }
+
+            await Article.findByIdAndUpdate(id, article)
+            res.json('success')
+
+        }catch(e){
+            console.log(e)
+            res.json({
+                message: 'Server error',
+                error: e
+            })
+        }
+    }
+
 }
 
 export default new articleController()
