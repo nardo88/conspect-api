@@ -14,18 +14,19 @@ app.use(cors())
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/article', articleRouter)
 
-async function start(){
-    try{
+async function start() {
+    try {
+        await mongoose.connect(constants.mongoUrl, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true
+        })
 
-        await mongoose.connect(constants.mongoUrl, {useUnifiedTopology: true, useNewUrlParser: true})
-        
         app.listen(PORT, () => {
             console.log(`Server started on port ${PORT}`)
         })
-    } catch(e){
+    } catch (e) {
         console.log(e)
     }
-
 }
 
 start()
