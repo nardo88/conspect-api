@@ -87,7 +87,7 @@ class articleController {
 
             res.json({
                 data: articles[0].data,
-                total: articles[0].total
+                total: articles[0].total || 0
             })
 
         } catch (e) {
