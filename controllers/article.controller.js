@@ -37,12 +37,13 @@ class articleController {
     async list(req, res) {
         try {
             const {
-                page = 1, limit = 10, category = ''
+                page = 1, limit = 10, category = '', title = ''
             } = req.query
 
             const articles = await Article.aggregate([{
                     $match: {
-                        category:  { $regex: category, $options: 'i' }
+                        category:  { $regex: category, $options: 'i' },
+                        title:  { $regex: title, $options: 'i' }
                     }
                 },
                 {
