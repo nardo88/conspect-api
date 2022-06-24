@@ -120,7 +120,9 @@ class userController {
 
             const users = await User.aggregate([
                 {
-                    $match: {}
+                    $match: {
+                        _id: {$ne: req.user.id}
+                    }
                 },
                 {
                     $sort: {
