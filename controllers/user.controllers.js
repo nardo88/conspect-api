@@ -97,6 +97,7 @@ class userController {
     async session(req, res) {
         try {
             const user = await User.findById(req.user.id)
+
             res.json({
                 email: user.email,
                 roles: user.roles,
@@ -167,6 +168,25 @@ class userController {
                 data: users[0].data,
                 total: users[0].total || 0
             })
+
+        } catch (e) {
+            console.log(e)
+            res.json({
+                message: 'Server error',
+                error: e
+            })
+        }
+    }
+
+    async update(req, res){
+        try {
+            const id = req.params.id
+            const data = req.body
+
+            await User.findByIdAndUpdate(id, {
+                ...data
+            })
+            res.json('success')
 
         } catch (e) {
             console.log(e)
