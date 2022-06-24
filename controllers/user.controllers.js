@@ -72,6 +72,7 @@ class userController {
             return res.json({
                 token,
                 id: user._id,
+                roles: user.roles
             })
         } catch (e) {
             console.log(e)
