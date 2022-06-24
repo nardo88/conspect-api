@@ -14,6 +14,6 @@ router.post('/signin', [
     check('email', 'Unicorrect email').isEmail(),
 ], userControllers.signIn)
 
-router.get('/', auth, userControllers.session )
+router.get('/session', auth, userControllers.session )
 
 export default router
