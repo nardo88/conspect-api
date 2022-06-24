@@ -1,9 +1,13 @@
-import {validationResult} from "express-validator"
+import {
+    validationResult
+} from "express-validator"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import constants from "../config/constants.js"
 import User from "../models/user.js"
-import { createId } from "../utils/createId.js"
+import {
+    createId
+} from "../utils/createId.js"
 
 class userController {
     async signUp(req, res) {
@@ -15,9 +19,14 @@ class userController {
                     errors
                 })
             }
-            const {email,password} = req.body
+            const {
+                email,
+                password
+            } = req.body
 
-            const candidate = await User.findOne({email})
+            const candidate = await User.findOne({
+                email
+            })
 
             if (candidate) {
                 return res.json({
@@ -33,7 +42,9 @@ class userController {
             })
             await user.save()
 
-            res.json({message: 'User was created'})
+            res.json({
+                message: 'User was created'
+            })
 
         } catch (e) {
             console.log(e)
@@ -83,13 +94,76 @@ class userController {
         }
     }
 
-    async session(req, res){
+    async session(req, res) {
         try {
             const user = await User.findById(req.user.id)
             res.json({
                 email: user.email,
                 roles: user.roles,
                 id: user._id
+            })
+
+        } catch (e) {
+            console.log(e)
+            res.json({
+                message: 'Server error',
+                error: e
+            })
+        }
+    }
+
+    async list(req, res) {
+        try {
+            const {
+                page = 1, limit = 10, category = '', title = ''
+            } = req.query
+
+            const users = await User.aggregate([
+                {
+                    $match: {}
+                },
+                {
+                    $sort: {
+                        updatedAt: -1
+                    },
+                },
+
+                {
+                    $facet: {
+                        data: [{
+                                $skip: (page - 1) * Number(limit)
+                            },
+                            {
+                                $limit: Number(limit)
+                            },
+                            {
+                                $project: {
+                                    id: '$_id',
+                                    _id: 0,
+                                    email: 1,
+                                    roles: 1,
+                                    createdAt: 1,
+                                    updatedAt: 1,
+                                }
+                            }
+                        ],
+                        total: [{
+                            $count: 'count'
+                        }]
+                    }
+                },
+                {
+                    $project: {
+                        data: 1,
+                        total: {
+                            $arrayElemAt: ['$total.count', 0]
+                        }
+                    }
+                }
+            ])
+            res.json({
+                data: users[0].data,
+                total: users[0].total || 0
             })
 
         } catch (e) {

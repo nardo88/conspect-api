@@ -15,5 +15,6 @@ router.post('/signin', [
 ], userControllers.signIn)
 
 router.get('/session', auth, userControllers.session )
+router.get('/', auth, userControllers.list )
 
 export default router
