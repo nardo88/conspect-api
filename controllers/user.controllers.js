@@ -82,6 +82,24 @@ class userController {
         }
     }
 
+    async session(req, res){
+        try {
+            const user = await User.findById(req.user.id)
+            res.json({
+                email: user.email,
+                roles: user.roles,
+                id: user._id
+            })
+
+        } catch (e) {
+            console.log(e)
+            res.json({
+                message: 'Server error',
+                error: e
+            })
+        }
+    }
+
 
 }
 

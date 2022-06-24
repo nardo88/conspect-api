@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import userControllers from '../controllers/user.controllers.js'
 import { check } from "express-validator";
+import auth from '../middleware/auth.middleware.js'
 
 const router = new Router()
 
@@ -12,5 +13,7 @@ router.post('/signup', [
 router.post('/signin', [
     check('email', 'Unicorrect email').isEmail(),
 ], userControllers.signIn)
+
+router.get('/', auth, userControllers.session )
 
 export default router
